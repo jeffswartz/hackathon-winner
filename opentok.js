@@ -325,7 +325,8 @@
         appName = window.navigator.appName,
         navigatorVendor,
         browser = 'unknown',
-        version = -1;
+        version = -1,
+        os = 'unknown';
 
     if (userAgent.indexOf('opera') > -1 || userAgent.indexOf('opr') > -1) {
       browser = 'Opera';
@@ -374,8 +375,16 @@
       }
     }
 
+    if (userAgent.indexOf('iphone') > -1 || userAgent.indexOf('ipad') > -1
+      || userAgent.indexOf('ipod') > -1) {
+      os = 'iOS';
+    } else if (userAgent.indexOf('android') > -1) {
+      os = 'Android';
+    }
+
     return {
       browser: browser,
+      os: os,
       version: version,
       iframeNeedsLoad: userAgent.indexOf('webkit') < 0
     };
@@ -387,6 +396,10 @@
 
   OTHelpers.browserVersion = function() {
     return _browser;
+  };
+
+  OTHelpers.browserOs = function() {
+    return _browsser.os;
   };
 
 
@@ -4685,7 +4698,9 @@ OTHelpers.centerElement = function(element, width, height) {
 
     if (!session) {
       session = new OT.Session(apiKey, sessionId);
-      OT.sessions.add(session);
+      if (session) {
+        OT.sessions.add(session);
+      }
     }
 
     return session;
@@ -4897,6 +4912,7 @@ OTHelpers.centerElement = function(element, width, height) {
     }
 
     var publisher = new OT.Publisher();
+    if (!publisher) return;
     OT.publishers.add(publisher);
 
     var triggerCallback = function triggerCallback (err) {
@@ -4921,12 +4937,16 @@ OTHelpers.centerElement = function(element, width, height) {
     };
 
 
-    publisher.once('initSuccess', removeInitSuccessAndCallComplete);
-    publisher.once('publishComplete', removeHandlersAndCallComplete);
+    if (!OT.checkSystemRequirements()) {
+      return;
+    } else {
+      publisher.once('initSuccess', removeInitSuccessAndCallComplete);
+      publisher.once('publishComplete', removeHandlersAndCallComplete);
 
-    publisher.publish(targetElement, properties);
+      publisher.publish(targetElement, properties);
 
-    return publisher;
+      return publisher;
+    }
   };
 
 
@@ -4950,6 +4970,23 @@ OTHelpers.centerElement = function(element, width, height) {
     };
 
     return systemRequirementsMet;
+  };
+
+  OT.supportsOpenTokExtension = function() {
+    OT.debug('OT.supportsOpenTokExtension()');
+
+  //   if (!OT.checkSystemRequirements())
+  //  if (OTHelpers.browserOs() == "iOS" || OTHelpers.browserOs() == "Android") {
+    if (window.navigator.userAgent.toLowerCase().indexOf('iphone') > -1
+        || window.navigator.userAgent.toLowerCase().indexOf('ipad') > - 1
+        || window.navigator.userAgent.toLowerCase().indexOf('ipod') > - 1
+        || window.navigator.userAgent.toLowerCase().indexOf('android') > - 1
+      )
+    {
+      return true;
+    }
+
+    return false;
   };
 
 
@@ -5389,13 +5426,17 @@ OTHelpers.centerElement = function(element, width, height) {
 
       _byId[id] = _models.push(model) - 1;
 
-      model.on('updated', onModelUpdate, this);
-      model.on('destroyed', onModelDestroy, this);
+      if (!OT.checkSystemRequirements()) {
+        return;
+      } else {
+        model.on('updated', onModelUpdate, this);
+        model.on('destroyed', onModelDestroy, this);
 
-      this.trigger('add', model);
-      this.trigger('add:'+id, model);
+        this.trigger('add', model);
+        this.trigger('add:'+id, model);
 
-      return this;
+        return this;
+      }
     };
 
     this.remove = function(model, reason) {
@@ -14052,7 +14093,7 @@ OTHelpers.centerElement = function(element, width, height) {
     // Check that the client meets the minimum requirements, if they don't the upgrade
     // flow will be triggered.
     if (!OT.checkSystemRequirements()) {
-      OT.upgradeSystemRequirements();
+   //   OT.upgradeSystemRequirements();
       return;
     }
 
@@ -16262,10 +16303,10 @@ OTHelpers.centerElement = function(element, width, height) {
  *  For more information on sessions and session IDs, see
  * <a href="/opentok/tutorials/create-session/">Session creation</a>.
  */
-  OT.Session = function(apiKey, sessionId) {
+  OT.Session = function(apiKey, sessionId, options) {
     // Check that the client meets the minimum requirements, if they don't the upgrade
     // flow will be triggered.
-    if (!OT.checkSystemRequirements()) {
+    if (!OT.checkSystemRequirements() && !OT.supportsOpenTokExtension()) {
       OT.upgradeSystemRequirements();
       return;
     }
@@ -16743,7 +16784,7 @@ OTHelpers.centerElement = function(element, width, height) {
   * @method #connect
   * @memberOf Session
   */
-    this.connect = function(token) {
+    this.connect = function(token, options) {
 
       if(apiKey == null && arguments.length > 1 &&
         (typeof arguments[0] === 'string' || typeof arguments[0] === 'number') &&
@@ -16758,6 +16799,23 @@ OTHelpers.centerElement = function(element, width, height) {
       if (this.is('connecting', 'connected')) {
         OT.warn('OT.Session: Cannot connect, the session is already ' + this.state);
         return this;
+      }
+      if(!OT.checkSystemRequirements() && !OT.supportsOpenTokExtension()) {
+        OT.upgradeSystemRequirements();
+      }
+      if (OT.supportsOpenTokExtension()) {
+        var queryString = "apk="+ encodeURIComponent(apiKey)
+          + "&sid="+ encodeURIComponent(sessionId)
+          + "&tkn="+ encodeURIComponent(token);
+        if (options.redirectUrl) queryString += "&rurl=" + encodeURIComponent(options.redirectUrl);
+        if (options.logoUrl) queryString += "&logo=" + encodeURIComponent(options.logoUrl);
+        if (options.roomName) queryString += "&room=" + encodeURIComponent(options.roomName);
+        if (options.publisherName) queryString += "&pname="
+          + encodeURIComponent(options.publisherName);
+        if (options.exitUrl) queryString += "&exit=" + encodeURIComponent(options.exitUrl);
+        var otExtensionUrl = "otvideo://start?" + queryString;
+        window.location = otExtensionUrl;
+        return;
       }
 
       reset.call(this);
