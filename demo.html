@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      var kHeadLoadTime = +new Date();
+      var kBuild = {"logging_url":"hlg.tokbox.com/prod/logging/ClientEvent","dashboard_url":"https://dashboard.tokbox.com","static_opentok_url":"https://static.opentok.com","static_opentok_url_secure":"https://static.opentok.com","TB_js_url":"//static.opentok.com/v1.1/js/TB.min.js","TB_js_webRTC_url":"//static.opentok.com/webrtc/v2.2/js/opentok.min.js","TB_js_url_secure":"//static.opentok.com/v1.1/js/TB.min.js","TB_js_webRTC_url_secure":"//static.opentok.com/webrtc/v2.2/js/opentok.min.js","labs_url":"http://labs.tokbox.com","www_url":"http://tokbox.com","labs_port":"3001","www_port":"3000","swc_url":"http://static.opentok.com/v1.1.6/as3/opentok_v1.1.6.swc","v1_version_number":"1.1.6","v2_version_number":"2.2.4","flash_version":"11.1.0","partner_id":"603","segment_io_project":"fxppmtnsfk","optimizely_account":"266972656"};
+      var kCurrentFilename = "documentation_tutorial";
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>OpenTok Quick Start Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta property="og:image" content="https://static.opentok.com/img/img_www_nav_TBLogoReg.png">
+    <meta property="og:title" content="Add live, face-to-face video with the OpenTok platform">
+    <meta property="og:url" content="http://www.tokbox.com">
+    <meta property="og:site_name" content="Tokbox">
+    <meta property="og:description" content="Use the OpenTok platform to add live, face-to-face communication to your web, iOS or Android app.">
+    <link rel="stylesheet" href="https://static.opentok.com/css/vendor/jquery-ui.css">
+    <link href="//fonts.googleapis.com/css?family=Muli:300,300italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://static.opentok.com/generated/css/application.css?v=1403753480">
+    <link rel="stylesheet" href="https://static.opentok.com/css/alertify.core.css">
+    <link rel="stylesheet" href="https://static.opentok.com/css/alertify.default.css">
+    <link rel="stylesheet" href="https://static.opentok.com/css/vendor/jquery-ui.css">
+    <script src="https://static.opentok.com/js/vendor/jquery-1.10.2.min.js"></script>
+    <script src="https://static.opentok.com/js/hlg/v1.0/hlg-instrument-v1.0.1.js"></script>
+    <script src="//cdn.optimizely.com/js/266972656.js"></script>
+    <script>
+      var hlg_analytics = hlg_instrument({
+        app_namespace: "ws", 
+        logging_url: "https://" + kBuild.logging_url,
+        page_name: kCurrentFilename,
+        partner_id: kBuild.partner_id
+      });
+      
+      window.analytics||(window.analytics=[]),window.analytics.methods=["identify","track","trackLink","trackForm","trackClick","trackSubmit","page","pageview","ab","alias","ready","group","on","once","off"],window.analytics.factory=function(t){return function(){var a=Array.prototype.slice.call(arguments);return a.unshift(t),window.analytics.push(a),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var method=window.analytics.methods[i];window.analytics[method]=window.analytics.factory(method)}window.analytics.load=function(t){var a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=("https:"===document.location.protocol?"https://":"http://")+"d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n)},window.analytics.SNIPPET_VERSION="2.0.8",
+      window.analytics.load( kBuild.segment_io_project );
+      window.analytics.page();
+      
+      
+    </script>
+    <link rel="stylesheet" href="https://static.opentok.com/generated/css/docs/docs.css?v=1403753480">
+    <link rel="stylesheet" href="https://static.opentok.com/css/documentation.css">
+    <link rel="stylesheet" href="https://static.opentok.com/css/docsHome.css">
+    <link rel="stylesheet" href="https://static.opentok.com/css/jsdoc-default.css">
+    <link rel="stylesheet" href="https://static.opentok.com/css/prettify-jsdoc.css">
+    <link rel="stylesheet" href="/css/vendor/syntaxHighlighter/shCore.css">
+    <link rel="stylesheet" href="/css/vendor/syntaxHighlighter/shThemeDefault.css">
+    <link rel="stylesheet" href="https://static.opentok.com/css/tinybox.css">
+    <script src="/js/vendor/syntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushJScript.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushObjC.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushXml.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushAS3.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushJava.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushPhp.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushPython.js" type="text/javascript"></script>
+    <script src="/js/vendor/syntaxHighlighter/shBrushRuby.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      SyntaxHighlighter.defaults['tab-size'] = 2;
+      SyntaxHighlighter.all();
+    </script>
+    <script src="https://static.opentok.com/js/documentation/prettify/prettify.js"></script>
+    <script src="https://static.opentok.com/js/showcase/tinybox.js"></script>
+    <script src="https://static.opentok.com/js/documentation/p2pInfo.js"></script>
+    <script type="text/javascript">
+      session_id = "1_MX4xMTI3fn5UaHUgSnVuIDI2IDE4OjE0OjE2IFBEVCAyMDE0fjAuMDg5NDE1MjV-fg"
+      token = "T1==cGFydG5lcl9pZD0xMTI3JnNpZz0xOGYzNTIwY2M4Yzc4NDcwYTBmOWRkM2NkY2I2Y2I3YTY3MjNiNDkxOnNlc3Npb25faWQ9MV9NWDR4TVRJM2ZuNVVhSFVnU25WdUlESTJJREU0T2pFME9qRTJJRkJFVkNBeU1ERTBmakF1TURnNU5ERTFNalYtZmcmY3JlYXRlX3RpbWU9MTQwMzgzMTY1NiZub25jZT0xOTY1NTMmcm9sZT1wdWJsaXNoZXI="
+      var api_key = 1127
+    </script>
+  </head>
+  <body id="">
+        <nav id="main_nav">
+          <div class="container">
+            <div class="second_container"><a id="mobile_nav_icon"></a>
+              <div id="logo_container"><a href="/" id="main_nav_logo" data-logclick="mainnav_home"></a></div>
+            </div>
+            <ul id="main_nav_links_container" class="mobile_nav_links_container">
+              <li id="industries_link" class="main_nav_link"><a href="/industries" data-subnav="industries_direct" data-logclick="mainnav_industries">Industries</a></li>
+              <li id="stories_link" class="main_nav_link"><a href="/customer-stories" data-logclick="mainnav_customer_stories">Customer Stories</a></li>
+              <li id="docs_link" class="main_nav_link"><a href="/opentok" data-logclick="mainnav_docs">Docs</a></li>
+              <li id="support_link" class="main_nav_link"><a href="/support/" data-logclick="mainnav_support">Support</a></li>
+              <li id="pricing_link" class="main_nav_link"><a href="/pricing" data-logclick="mainnav_pricing">Pricing</a></li>
+              <li id="signup_link_li" class="main_nav_link"><a id="login_link" data-mnlink="signup_box">Sign up</a></li>
+            </ul>
+            <ul id="mobile_subnav_container"></ul>
+          </div>
+          <div id="dashboard_access">
+            <div id="dboard_access_container">
+              <div class="full_width_container">
+                <div class="container"><a id="close_form_button" href="#"></a>
+                                <div id="login_box" class="dash_container">
+                                  <div class="row">
+                                    <h1 class="login_title">Login</h1>
+                                    <form id="login_form">
+                                      <div class="row">
+                                        <div class="four columns input">
+                                          <input id="login_form_email" type="text" placeholder="Email address" data-formerror="login_form_submit_error">
+                                        </div>
+                                        <div class="four columns input">
+                                          <input id="login_form_pw" type="password" placeholder="Password" data-formerror="login_form_submit_error">
+                                        </div>
+                                        <div class="four columns input">
+                                          <input id="login_form_submit" type="submit" value="Log in" class="btn_blue">
+                                          <div class="forgot_pw_container"><a data-mnlink="forgot_pw_box" class="forgot_pw_link">Forgot your password?</a></div>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="sign_up_copy ten columns">
+                                          <div id="login_form_submit_error"></div>Need an account?&nbsp;<a id="sign_up_link" data-mnlink="signup_box">Sign up</a>&nbsp;to start building with OpenTok&apos;s APIs.
+                                        </div>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+                                <div id="signup_box" class="dash_container">
+                                  <form id="sign_up_form">
+                                    <h1>Start your free trial.</h1>
+                                    <div class="row">
+                                      <p class="four columns">Try the platform today.<br>No credit card required.</p>
+                                      <div class="four columns">
+                                        <input name="email" type="text" placeholder="Email address" tabindex="1" class="signup_email">
+                                        <input name="password" type="password" placeholder="Password" tabindex="3" class="signup_pw">
+                                      </div>
+                                      <div class="four columns">
+                                        <div class="username-field">
+                                          <input name="name" type="text" placeholder="Full Name" tabindex="2" class="signup_username">
+                                        </div>
+                                      </div>
+                                      <div class="four columns">
+                                        <div class="tos tos-container clearfix">
+                                          <input name="signup_tos" type="checkbox" tabindex="4" class="signup_tos">
+                                          <label for="signup_tos" class="tos_label">&nbsp;I agree to&nbsp;<a href="/support/tos" target="_blank">Terms of Service.</a></label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="eight columns offset-by-four">
+                                        <input type="submit" value="Sign up" tabindex="5" class="signup_submit_btn btn_blue">
+                                      </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="eight columns offset-by-four">Already have an account?&nbsp;&nbsp;<a data-mnlink="login_box">Log in</a>
+                                      </div>
+                                    </div>
+                                  </form>
+                                  <form id="sign_up_form_3">
+                                    <h1>Start your free OpenTok trial.</h1>
+                                    <p>OpenTok is Tokbox&apos;s real-time video platform for web and mobile apps. Take advantage of our global infrastructure, quick implementation, and first-class support with a 30-day free trial. </p>
+                                    <div class="row input_fields basics">
+                                      <div class="four columns flush">
+                                        <input type="text" name="email" label="Email" placeholder="Email address *" class="signup_email">
+                                      </div>
+                                      <div class="four columns">
+                                        <div class="username-field">
+                                          <input type="text" label="name" name="name" placeholder="Full Name *" class="signup_name">
+                                        </div>
+                                      </div>
+                                      <div class="four columns">
+                                        <input type="password" label="Password" name="password" placeholder="Password *" class="signup_pw">
+                                      </div>
+                                    </div>
+                                    <div class="row input_fields profile">
+                                      <div class="four columns flush">
+                                        <label class="select">I work for...</label>
+                                        <div class="company_type">
+                                          <select name="company_type" data-settings="{&quot;cutOff&quot;:6}" class="dropdown">
+                                            <option value="" class="label">- please select -</option>
+                                            <option>myself</option>
+                                            <option>a company</option>
+                                            <option>an agency</option>
+                                            <option>prefer not to say</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                      <div class="four columns">
+                                        <label class="select">I am a...</label>
+                                        <div class="job_type">
+                                          <select name="job_type" data-settings="{&quot;cutOff&quot;:5}" class="dropdown">
+                                            <option value="" class="label">- please select -</option>
+                                            <option>developer</option>
+                                            <option>designer</option>
+                                            <option>manager</option>
+                                            <option>director/executive</option>
+                                            <option>prefer not to say</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row non-dev-header">
+                                      <h2>Where should we send developer instructions?</h2>
+                                      <p>To get started we want to send instructions to a developer. Where shall we send our OpenTok Developer Quick Start Guide?</p>
+                                    </div>
+                                    <div class="row radio-option">
+                                      <div class="twelve columns flush">
+                                        <ul class="delivery-options"> 
+                                          <li class="clearfix self">
+                                            <label>
+                                              <input name="qs_delivery" type="radio" value="self">I am a developer, send them to me.
+                                            </label>
+                                          </li>
+                                          <li class="clearfix developer">
+                                            <label>
+                                              <input name="qs_delivery" type="radio" value="developer">Send them to me, and my developer: 
+                                            </label>
+                                            <input type="text" name="developer_email" placeholder="Developer Email" class="developer_email">
+                                          </li>
+                                          <li class="clearfix no-developer">
+                                            <label>
+                                              <input name="qs_delivery" type="radio" value="need_help">I will need a developer to help me.
+                                            </label>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div class="form-footer">
+                                      <div class="row">
+                                        <div class="four columns tos-container flush">
+                                          <input name="signup_tos" type="checkbox" class="signup_tos">
+                                          <label for="signup_tos" class="tos_label">&nbsp;I agree to&nbsp;<a href="/support/tos" target="_blank">Terms of Service.</a></label>
+                                        </div>
+                                      </div>
+                                      <div class="row buttons">
+                                        <div class="eight columns flush">
+                                          <input type="submit" value="Sign up" class="signup_submit_btn btn_blue">
+                                          <p>Already have an account?&nbsp;&nbsp;<a data-mnlink="login_box">Log in</a></p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </form>
+                                  <form id="sign_up_form_2" class="clearfix">
+                                    <h1>Start your free OpenTok trial.</h1>
+                                    <p>OpenTok is Tokbox&apos;s real-time video platform for web and mobile apps. Take advantage of our global infrastructure, quick implementation, and first-class support with a 30-day free trial. </p>
+                                    <div class="row input_fields">
+                                      <div class="four columns flush">
+                                        <input type="text" name="email" label="Email" placeholder="Email address *" class="signup_email">
+                                        <div id="new_signup_email_error" class="std_error_field"></div>
+                                      </div>
+                                      <div class="four columns">
+                                        <div class="username-field">
+                                          <input type="text" label="name" name="name" placeholder="Full Name *" class="signup_name">
+                                        </div>
+                                        <div id="new_signup_username_error" class="std_error_field"></div>
+                                      </div>
+                                      <div class="four columns">
+                                        <input type="password" label="Password" name="password" placeholder="Password *" class="signup_pw">
+                                        <div id="new_signup_pw_error" class="std_error_field"></div>
+                                      </div>
+                                    </div>
+                                    <p class="is_developer_label"> <span>Will you be the developer on the account?</span></p>
+                                    <div class="row radios">
+                                      <div class="two columns flush is-developer-yes">
+                                        <label for="new_signup_reg_flow_developer_radio"> 
+                                          <input id="new_signup_reg_flow_developer_radio" type="radio" name="is_developer" value="developer">Yes
+                                        </label>
+                                      </div>
+                                      <div class="two columns is-developer-no">
+                                        <label for="new_signup_reg_flow_non_developer_radio">
+                                          <input id="new_signup_reg_flow_non_developer_radio" type="radio" name="is_developer" value="non-developer">No
+                                        </label>
+                                      </div>
+                                    </div>
+                                    <div id="new_signup_reg_flow_non_developer_information">
+                                      <div class="row non-dev-header">
+                                        <h2>Invite a developer to help</h2>
+                                        <p>We recommend collaborating with a developer. Enter their information and we’ll send them our quick-start guide.</p>
+                                      </div>
+                                      <div class="row input_fields developer">
+                                        <div class="four columns flush">
+                                          <input name="developer_email" type="text" placeholder="Developer email" class="developer_email">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="form-footer">
+                                      <div class="row">
+                                        <div class="four columns tos-container">
+                                          <input name="signup_tos" type="checkbox" class="signup_tos">
+                                          <label for="signup_tos" class="tos_label">&nbsp;I agree to&nbsp;<a href="/support/tos" target="_blank">Terms of Service.</a></label>
+                                        </div>
+                                      </div>
+                                      <div class="row buttons">
+                                        <div class="eight columns flush">
+                                          <input type="submit" value="Sign up" class="signup_submit_btn btn_blue">
+                                          <p>Already have an account?&nbsp;&nbsp;<a data-mnlink="login_box">Log in</a></p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div id="reg_confirm_box" class="dash_container">
+                                  <form>
+                                    <h1>Thanks! Verify your account.</h1>
+                                    <div class="row">
+                                      <div class="two columns mail-icon"><img src="https://static.opentok.com/img/reg_confirm_mail_icon.png" width="88" height="54">
+                                      </div>
+                                      <div class="forteen columns message">
+                                        <p>We’ve sent you a confirmation via email. Please check your inbox to verify before logging in.</p>
+                                        <h3 id="reg_confirm_user_email"></h3>
+                                      </div>
+                                    </div>
+                                    <div id="new_signup_reg_flow_confirmation">
+                                      <div class="row">
+                                        <div class="forteen columns offset-by-two"> 
+                                          <p>Your developer has also been sent a quick-start guide on your behalf.</p>
+                                          <h3 id="new_signup_reg_flow_confirm_developer_email"></h3>
+                                          <div class="keep-exploring">
+                                            <p>
+                                               
+                                              Want to keep exploring?&nbsp;&nbsp<a id="signup_reg_flow_view_demo" href="http://opentokrtc.com/">View a demo</a>&nbsp;&nbsp;or&nbsp;&nbsp;<a id="signup_reg_flow_get_to_know" href="/opentok">get to know the platform.</a>
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="columns offset-by-two resend-row">Didn&apos;t get the email?&nbsp;&nbsp;<a id="resend_email_link">Resend</a></div>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div id="need_verification_box" class="dash_container">
+                                  <div class="header_row clearfix"><img src="https://static.opentok.com/img/error_circle.png" width="51" height="53">
+                                    <h1>Just one more step</h1>
+                                  </div>
+                                  <div class="row">
+                                    <p>You need to verify your email address before you can log in.</p>
+                                  </div>
+                                  <div class="row">
+                                    <form id="verify_email_form">
+                                      <div class="four columns">
+                                        <input id="verify_email" type="text" placeholder="Email address">
+                                      </div>
+                                      <div class="four columns">
+                                        <input type="submit" value="Resend email" class="btn_blue">
+                                      </div>
+                                    </form>
+                                  </div>
+                                  <div class="row">Back to&nbsp;&nbsp;<a data-mnlink="login_box">Login</a>
+                                  </div>
+                                </div>
+                                <div id="email_verified_box" class="dash_container">
+                                  <form>
+                                    <div class="header_row clearfix">
+                                      <h1>Congrats! You’re all set.</h1>
+                                    </div>
+                                    <div class="row">
+                                      <p>Log in to the dashboard to access API keys, view usage, upgrade your account, and more.</p>
+                                    </div>
+                                    <div class="row form_fields">
+                                      <div class="four columns">
+                                        <input type="text" placeholder="Email address">
+                                      </div>
+                                      <div class="four columns">
+                                        <input type="password" placeholder="Password">
+                                      </div>
+                                      <div class="five columns">
+                                        <input type="submit" value="Login" class="btn_blue"><br><a data-mnlink="forgot_pw_box" class="forgot_pw_link">Forgot your password?</a>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div id="forgot_pw_box" class="dash_container">
+                                  <form id="forgot_pw_form">
+                                    <div class="header_row clearfix">
+                                      <h1>We’ve got you covered.</h1>
+                                    </div>
+                                    <div class="row form-fields">
+                                      <div class="four columns">
+                                        <input id="forgot_pw_email" type="text" placeholder="Email address" data-formerror="forgot_pw_email_error">
+                                        <div id="forgot_pw_email_error" class="ten columns alpha std_error_field"></div>
+                                      </div>
+                                      <div class="four columns">
+                                        <input id="forgot_pw_submit" type="submit" value="Send instructions" class="btn_blue">
+                                      </div>
+                                    </div>
+                                    <div class="row form-links">
+                                      <div class="eight columns">
+                                        <p>Forgot your login email?&nbsp;&nbsp;<a href="mailto:support@tokbox.com?subject=Forgot my login email" data-logclick="mainnav_contact_us">Contact us.</a></p>
+                                        <p> <a data-mnlink="login_box">Back to Login</a>
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                                <div id="forgot_pw_confirm_box" class="dash_container">
+                                  <form>
+                                    <h1>Help is on the way.</h1>
+                                    <div class="row">
+                                      <div class="two column mail-icon"><img src="https://static.opentok.com/img/reg_confirm_mail_icon.png" width="88" height="54">
+                                      </div>
+                                      <div class="forteen columns message">
+                                        <p>We've sent instructions to:</p>
+                                        <h3 id="forgot_pw_confirm_email"></h3>
+                                      </div>
+                                    </div>
+                                    <div class="row">Didn't get the email?&nbsp;&nbsp;<a id="forgot_confirm_resend_link">Resend</a></div>
+                                  </form>
+                                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+        <div id="main_nav_spacer"></div>
+    <div id="content_bg">
+      <div id="docs_body">
+        <div class="container pad_vertical">
+          <div class="four columns">
+            <ul id="docs_left_nav">
+              <li><a href="/opentok/quick-start/">Quick Start</a></li>
+              <li><a href="/opentok/intro/">Intro to WebRTC</a></li>
+              <li><a href="/opentok/requirements/">System Requirements</a></li>
+              <li><a href="/opentok/libraries/client/">WebRTC Client Libraries </a>
+                <ul>
+                  <li><strong><a href="/opentok/libraries/client/js/">JavaScript</a></strong></li>
+                  <li><strong><a href="/opentok/libraries/client/ios/">iOS</a></strong></li>
+                  <li><strong><a href="/opentok/libraries/client/android/">Android</a></strong></li>
+                  <li><a href="https://github.com/songz/cordova-plugin-opentok">Phonegap</a></li>
+                  <li><a href="https://marketplace.appcelerator.com/apps/2920">Titanium    </a></li>
+                </ul>
+              </li>
+              <li><a href="/opentok/libraries/server/">Server SDKs </a>
+                <ul>
+                  <li><strong> <a href="/opentok/libraries/server/java/">Java</a></strong></li>
+                  <li><strong> <a href="/opentok/libraries/server/php/">PHP</a></strong></li>
+                  <li><strong> <a href="/opentok/libraries/server/python/">Python</a></strong></li>
+                  <li><strong> <a href="/opentok/libraries/server/ruby/">Ruby</a></strong></li>
+                  <li><strong> <a href="/opentok/libraries/server/dot-net/">.NET</a></strong></li>
+                  <li><strong> <a href="/opentok/libraries/server/node/">Node.js</a></strong></li>
+                  <li><a href="http://search.cpan.org/dist/OpenTok-API/lib/OpenTok/API.pm">Perl</a></li>
+                  <li><a href="https://github.com/cioc/tokbox">Golang</a></li>
+                </ul>
+              </li>
+              <li><a href="/opentok/api/">REST API Reference</a>
+                <ul>
+                  <li><a href="/opentok/api/#session_id_production">Create Session</a></li>
+                </ul>
+              </li>
+              <li><a href="/opentok/tutorials/">Tutorials and Examples</a></li>
+            </ul>
+            <div class="docs-nav-promo">
+              <h4><a href="/support/" class="link_blue">Help Center</a></h4>
+              <h4><a href="/opentok/v1/" class="link_blue">OpenTok 1.0</a></h4>
+              <p>Switch to our Flash-based platform documentation.</p>
+              <p> <a href="/opentok/choose/">Learn more about 1.0 vs 2.0</a></p>
+            </div>
+          </div>
+          <div id="docs_container" class="twelve columns">
+
+
+<section id="intro">
+    <div>
+        <h1>Quick Start Demo for OpenTok</h1>
+        <p id="topCaption">Below is a demo of a simple OpenTok web application created using our <a href="./">Quick Start guide</a>.</p>
+    </div>
+    <div style="clear:both;"></div>
+</section>
+
+<div id="mid-section-wrapper" class="quick-start-section">
+
+<h3>Stop! It's Demo Time!</h3>
+
+<iframe src ="iframe.html?sessionId=1_MX4xMTI3fn5UaHUgSnVuIDI2IDE4OjE0OjE2IFBEVCAyMDE0fjAuMDg5NDE1MjV-fg" width="100%" height="300" class="tutorial"></iframe>
+
+<h3>Share this URL with friends!</h3>
+
+<p>Cut and paste the URL below into an email and send it to a friend or co-worker. As soon as they open the URL you can begin your chat!</p>
+
+<p><input type="text" id="shareDemoUrl" value="?sessionId=1_MX4xMTI3fn5UaHUgSnVuIDI2IDE4OjE0OjE2IFBEVCAyMDE0fjAuMDg5NDE1MjV-fg" style="width: 100%" /></p>
+
+<p>Or, open the above URL <a href="?sessionId=1_MX4xMTI3fn5UaHUgSnVuIDI2IDE4OjE0OjE2IFBEVCAyMDE0fjAuMDg5NDE1MjV-fg" target="_new">in a different window</a>...</p>
+
+<script type="text/javascript">
+var v = document.getElementById("shareDemoUrl").value;
+if (!v.match('/^http/')) {
+  document.getElementById("shareDemoUrl").value = window.location.href + v;
+  document.getElementById("seeDemoUrl").value = window.location.href + v;
+}
+</script>
+
+<h2>What Next?</h2>
+
+<p>Now that you are familiar with a simple OpenTok application, what's next from here?</p>
+
+<ul>
+  <li><a href="how-it-works.html">Learn more about the code above.</a></li>
+  <li><a href="/opentok/libraries/">Find a WebRTC client library to help you build your next OpenTok application.</a></li>
+  <li><a href="/opentok/tutorials/">Browse our tutorials.</a></li>
+</ul>
+
+</div>
+
+            <div id="ircFloater"><a class="minBtn"><span class="arrow"></span></a>
+              <h4><a href="/support/officehours/popup" title="Join IRC Live Chat" class="popup"><span class="innerWrapper">IRC Live Chat</span></a></h4>
+              <p>Have a quick question? Chat with TokBox Support on IRC. <a href="/support/officehours/popup" class="popup">Join chat</a></p>
+            </div>
+            <p class="feedback">Was this page helpful? <a href="" data-feedback_logclick="1" class="docs_button">Yes </a><a href="" data-feedback_logclick="0" class="docs_button">No </a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+        <footer>
+          <div class="container">
+            <div class="nav_row clearfix"><a href="/about" data-logclick="footer_about">About</a><a href="/press" data-logclick="footer_press">Press</a><a href="/events" data-logclick="footer_events">Events</a><a href="/careers" data-logclick="footer_careers">Careers</a><a href="http://tokbox.com/blog" target="_blank" data-logclick="footer_social_blog">Blog</a><a href="http://labs.opentok.com">Labs</a><a href="/support/" data-logclick="footer_faq">FAQs</a><a href="/about-webrtc" data-logclick="footer_webrtc">What is WebRTC?</a></div>
+            <div class="footer_icons"><a href="http://tokbox.com/blog" target="_blank" data-logclick="footer_social_blog" class="blog"><img src="https://static.opentok.com/img/img_www_footer_blog.png" width="27" height="26"></a><a href="http://www.facebook.com/tokbox" target="_blank" data-logclick="footer_social_facebook" class="facebook"><img src="https://static.opentok.com/img/img_www_footer_fb.png" width="27" height="26"></a><a href="http://www.twitter.com/tokbox" target="_blank" data-logclick="footer_social_twitter" class="twitter"><img src="https://static.opentok.com/img/img_www_footer_twitter.png" width="27" height="26"></a><a href="https://plus.google.com/101919955329719842615" target="_blank" data-logclick="footer_social_googleplus" class="gplus"><img src="https://static.opentok.com/img/img_www_footer_googleplus.png" width="27" height="26"></a><a href="https://www.youtube.com/channel/UC4WuhoxEQlsftp-VI7hlyJA" target="_blank" data-logclick="footer_social_youtube" class="youtube"><img src="https://static.opentok.com/img/img_www_footer_youtube.png" width="27" height="26"></a><a href="http://vimeo.com/tokboxinc" target="_blank" data-logclick="footer_social_vimeo" class="vimeo"><img src="https://static.opentok.com/img/img_www_footer_vimeo.png" width="27" height="26"></a></div>
+            <div class="footer_logos"><a href="/"><img src="https://static.opentok.com/img/footer_logo.png" width="95" height="25" class="footer_logo_tb"></a><a href="http://www.telefonica.com/en/digital/html/home/" target="_blank"><img src="https://static.opentok.com/img/footer_telefonica_logo.png" width="77" height="20" class="footer_logo_tf"></a></div>
+            <div class="copyright_row"><span class="copyright">TokBox Inc., 2007-2014. All Rights Reserved.</span><span class="separator">| </span><a href="/support/tos" target="_blank">Terms of Service </a><span class="separator">| </span><a href="/support/privacy-policy" target="_blank">Privacy Policy</a></div>
+          </div>
+        </footer>
+    <script>window.optimizely = window.optimizely || [];</script>
+    <script src="https://static.opentok.com/js/vendor/jquery-ui.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/jquery.easing.1.3.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/jquery-ui.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/underscore-min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/alertify.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/jquery.feeds.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/jquery.cookie.js"></script>
+    <script src="https://static.opentok.com/js/vendor/jquery.validate.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/moment.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/jquery.scrollTo.min.js"></script>
+    <script src="https://static.opentok.com/js/vendor/jquery.easydropdown.min.js"></script>
+    <script src="https://static.opentok.com/js/help_center/hc.js"></script>
+    <script src="https://static.opentok.com/generated/js/application.js?v=1403753480"></script>
+    <script src="https://static.opentok.com/generated/js/tb-website.js?v=1403753480"></script>
+    <script>
+      function getQueryVariable(query,variable) {
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+          var pair = vars[i].split('=');
+          if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+          }
+        }
+      }
+      
+      hlg_analytics.after_log_listeners.push( function(data){
+        if (data.action == 'ws_link_event' || data.action == 'ws_login_event') {
+          analytics.track(data.payload)
+        } 
+        else if (data.action == 'ws_signup_attempt') {
+          analytics.identify(null, {'signup_source':data.payload})
+        } 
+        else if (data.action == 'contact_form_success') {
+          var email = getQueryVariable(data.payload,'email');
+          if (typeof email != 'undefined') {
+            analytics.identify(null, {email: email});
+          }
+        }
+        else if (data.action == 'ws_signup_successful') {
+          var user_id = getQueryVariable(data.payload,'id');
+          var email   = getQueryVariable(data.payload,'email');
+          if (typeof email != 'undefined') {
+            analytics.identify( user_id, {email: email});
+          }
+          analytics.track(data.action);
+          var dev = getQueryVariable(data.payload,'developer') || 'unknown';
+          analytics.identify(user_id, {is_developer: dev});
+        } 
+        else if (data.action != 'ws_ab_test') {
+        }
+        else if (data.action != 'ws_page_load') {
+          analytics.track(data.action);
+        }
+      });
+      
+    </script>
+    <script>
+      (function(){
+        if (typeof _G.page[kCurrentFilename] !== "undefined"){
+          _G.page[kCurrentFilename]();
+        }
+        // log page load event
+        var load_time = +new Date() - kHeadLoadTime;
+        var oid = $.cookie('optimizelyEndUserId'); 
+        var oex = $.cookie('optimizelyBuckets');
+        var load_info = {
+          "referrer": document.referrer || "null",
+          "optimizely_id": oid || "null",
+          "optimizely_exp": oex || "null",
+          "load_millisecs": load_time
+        };
+        
+        hlg_analytics.log_event("page_load", "", load_info);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+    <script src="opentok.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+      // Replace with your API key (see https://dashboard.tokbox.com/projects)
+      // and a valid session ID (see http://tokbox.com/opentok/tutorials/create-session/):
+      var session = OT.initSession(1127, "2_MX4xMTI3fn5UaHUgSnVuIDI2IDE4OjE1OjI2IFBEVCAyMDE0fjAuNjM3NTQyM35-", {token: "T1==cGFydG5lcl9pZD0xMTI3JnNka192ZXJzaW9uPXRicGhwLXYwLjkxLjIwMTEtMDctMDUmc2lnPWE0M2FmYTI1ODc4ZDcwMWM1ZWZmY2Y0MmRkMjVkZjQxNGNiYTRmYzM6c2Vzc2lvbl9pZD0yX01YNHhNVEkzZm41VWFIVWdTblZ1SURJMklERTRPakUxT2pJMklGQkVWQ0F5TURFMGZqQXVOak0zTlRReU0zNS0mY3JlYXRlX3RpbWU9MTQwMzg5NTM0OCZyb2xlPW1vZGVyYXRvciZub25jZT0xNDAzODk1MzQ4Ljc3MzY2MDU3MTM1ODQmZXhwaXJlX3RpbWU9MTQwNjQ4NzM0OA=="});
+
+      session.on("streamCreated", function(event) {
+        session.subscribe(event.stream);
+      });
+      session.connect("T1==cGFydG5lcl9pZD0xMTI3JnNka192ZXJzaW9uPXRicGhwLXYwLjkxLjIwMTEtMDctMDUmc2lnPWE0M2FmYTI1ODc4ZDcwMWM1ZWZmY2Y0MmRkMjVkZjQxNGNiYTRmYzM6c2Vzc2lvbl9pZD0yX01YNHhNVEkzZm41VWFIVWdTblZ1SURJMklERTRPakUxT2pJMklGQkVWQ0F5TURFMGZqQXVOak0zTlRReU0zNS0mY3JlYXRlX3RpbWU9MTQwMzg5NTM0OCZyb2xlPW1vZGVyYXRvciZub25jZT0xNDAzODk1MzQ4Ljc3MzY2MDU3MTM1ODQmZXhwaXJlX3RpbWU9MTQwNjQ4NzM0OA==", function(error) {
+        var publisher = OT.initPublisher();
+        session.publish(publisher);
+      });
+    </script>
+  </body>
+</html>
+
